@@ -1,9 +1,15 @@
 require 'thor'
 
 class Bowling < Thor
-  desc "game FILE.txt", "game bowling game with FILE.txt"
-  def game(file)
-    puts "Read game from '#{file}'"
+  def self.exit_on_failure?
+    true
+  end
+
+  desc "game GAME.txt", "game bowling game with GAME.txt"
+  def game(file_name)
+    game = Game.new(file_name)
+    ui = UI.new(game.result)
+    puts ui.to_s
   end
 end
 
