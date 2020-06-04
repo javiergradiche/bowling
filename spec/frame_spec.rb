@@ -171,4 +171,60 @@ RSpec.describe Frame do
       expect(@frame.third_bowl).to be nil
     end
   end
+
+  context 'Calculate score frames 1..9' do
+    before(:each) do
+      @frame1 = Frame.new({position: 1})
+      @frame2 = Frame.new({position: 2})
+      @frame3 = Frame.new({position: 3})
+    end
+
+    it "Strike first frame, spare second" do
+      @frame1.first_bowl = 10
+      @frame2.first_bowl = 8
+      @frame2.second_bowl = 2
+      @frame1.calculate_score(@frame2, @frame3)
+      expect(@frame1.score).to be 20
+    end
+
+    it "Strike first frame, open second" do
+      @frame1.first_bowl = 10
+      @frame2.first_bowl = 8
+      @frame2.second_bowl = 1
+      @frame1.calculate_score(@frame2, @frame3)
+      expect(@frame1.score).to be 19
+    end
+
+    it "Strike first & second frame, spare third"
+    it "Strike first & second frame, open third"
+    it "Strike first, second & third frame"
+    it "Spare first frame, strike second"
+    it "Spare first frame, spare second"
+    it "Spare first frame, open second"
+  end
+
+  context 'Calculate score frame 10' do
+    before(:each) do
+      @frame = Frame.new({position: 10})
+    end
+
+    it 'Add 3 falls if strike at first' do
+      @frame.add_fall(10)
+      @frame.add_fall(1)
+      expect(@frame.finished?).to be false
+      @frame.add_fall(1)
+      expect(@frame.finished?).to be true
+    end
+
+    it 'Only 2 falls if not strike at first' do
+      @frame = Frame.new({position: 10})
+      @frame.add_fall(9)
+      @frame.add_fall(1)
+      expect(@frame.finished?).to be true
+      expect(@frame.add_fall(3)).to be false
+      expect(@frame.third_bowl).to be nil
+    end
+  end
+
+
 end
