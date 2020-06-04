@@ -20,7 +20,7 @@ class UI
     @game.players.each do |player_name, player|
       output += "#{player.name}\n"
       output += draw_pinfalls(player.pinfalls)
-      output += draw_score(player.scores)
+      # output += draw_score(player.scores)
     end
     output
   end

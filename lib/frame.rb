@@ -8,10 +8,11 @@ class Frame
     @first_bowl = options[:first_bowl]
     @second_bowl = options[:second_bowl]
     @third_bowl = options[:third_bowl]
+    @score = 0
   end
 
   def add_fall(falls)
-    return false if completed?
+    return false if finished?
 
     if @first_bowl.nil?
       @first_bowl = falls
@@ -20,6 +21,10 @@ class Frame
     else
       @third_bowl = falls
     end
+  end
+
+  def add_score(score)
+    @score = score
   end
 
   def next_fall
