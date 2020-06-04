@@ -11,20 +11,32 @@ class Frame
     @score = 0
   end
 
-  def calculate_score(first_next_frame, second_next_frame)
+  def calculate_score(acum_score, first_next_frame, second_next_frame)
     if @position == 10
-      @score = calculate_score_frame_10
+      @score = acum_score + calculate_score_frame_10
     else
-      @score = calculate_score_frame_1_to_9(first_next_frame, second_next_frame)
+      @score = acum_score + calculate_score_frame_1_to_9(first_next_frame, second_next_frame)
     end
   end
 
   def calculate_score_frame_1_to_9(first_next_frame, second_next_frame)
-    0
+    first_next_score = 0
+    second_next_score = 0
+    if strike?
+      first_next_score = first_next_frame.bowls_score
+      second_next_score = (first_next_frame.strike?)? second_next_frame.first_bowl : 0
+    elsif spare?
+      first_next_score = first_next_frame.first_bowl
+    end
+    bowls_score + first_next_score + second_next_score
   end
 
   def calculate_score_frame_10
     0
+  end
+
+  def bowls_score
+    (@first_bowl||0) + (@second_bowl||0) + (@third_bowl||0)
   end
 
   def add_fall(falls)

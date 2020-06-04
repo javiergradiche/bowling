@@ -183,7 +183,7 @@ RSpec.describe Frame do
       @frame1.first_bowl = 10
       @frame2.first_bowl = 8
       @frame2.second_bowl = 2
-      @frame1.calculate_score(@frame2, @frame3)
+      @frame1.calculate_score(0, @frame2, @frame3)
       expect(@frame1.score).to be 20
     end
 
@@ -191,7 +191,7 @@ RSpec.describe Frame do
       @frame1.first_bowl = 10
       @frame2.first_bowl = 8
       @frame2.second_bowl = 1
-      @frame1.calculate_score(@frame2, @frame3)
+      @frame1.calculate_score(0, @frame2, @frame3)
       expect(@frame1.score).to be 19
     end
 
