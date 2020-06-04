@@ -115,7 +115,7 @@ RSpec.describe Frame do
     end
   end
 
-  context 'Popuplate framwes 1..9' do
+  context 'Popuplate frames 1..9' do
     before(:each) do
       @frame = Frame.new({position: 1})
     end
@@ -128,47 +128,47 @@ RSpec.describe Frame do
     end
 
     it 'Return false if you want to add more than 2 falls' do
-      frame = Frame.new({position: 1})
-      frame.add_fall(1)
-      frame.add_fall(2)
-      expect(frame.valid?).to be true
-      expect(frame.add_fall(3)).to be false
-      expect(frame.third_bowl).to be nil
+      @frame.add_fall(1)
+      @frame.add_fall(2)
+      expect(@frame.valid?).to be true
+      expect(@frame.add_fall(3)).to be false
+      expect(@frame.third_bowl).to be nil
     end
 
     it 'Strike is working' do
-      frame = Frame.new({position: 1})
-      frame.add_fall(10)
-      expect(frame.strike?).to be true
-      expect(frame.finished?).to be true
+      @frame.add_fall(10)
+      expect(@frame.strike?).to be true
+      expect(@frame.finished?).to be true
     end
 
     it 'Spare is working' do
-      frame = Frame.new({position: 1})
-      frame.add_fall(2)
-      frame.add_fall(8)
-      expect(frame.spare?).to be true
-      expect(frame.finished?).to be true
+      @frame.add_fall(2)
+      @frame.add_fall(8)
+      expect(@frame.spare?).to be true
+      expect(@frame.finished?).to be true
     end
   end
 
-  context 'Popuplate framwes 10' do
-    it 'Add 3 falls if strike at first' do
-      frame = Frame.new({position: 10})
-      frame.add_fall(10)
-      frame.add_fall(1)
-      expect(frame.finished?).to be false
-      frame.add_fall(1)
-      expect(frame.finished?).to be true
+  context 'Popuplate frame 10' do
+    before(:each) do
+      @frame = Frame.new({position: 10})
     end
 
-    it 'Add 2 falls if not strike at first' do
-      frame = Frame.new({position: 10})
-      frame.add_fall(9)
-      frame.add_fall(1)
-      expect(frame.finished?).to be true
-      expect(frame.add_fall(3)).to be false
-      expect(frame.third_bowl).to be nil
+    it 'Add 3 falls if strike at first' do
+      @frame.add_fall(10)
+      @frame.add_fall(1)
+      expect(@frame.finished?).to be false
+      @frame.add_fall(1)
+      expect(@frame.finished?).to be true
+    end
+
+    it 'Only 2 falls if not strike at first' do
+      @frame = Frame.new({position: 10})
+      @frame.add_fall(9)
+      @frame.add_fall(1)
+      expect(@frame.finished?).to be true
+      expect(@frame.add_fall(3)).to be false
+      expect(@frame.third_bowl).to be nil
     end
   end
 end

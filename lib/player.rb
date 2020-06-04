@@ -21,6 +21,7 @@ class Player
       if current_frame.finished?
         frame_index += 1
         @frames << Frame.new({position: frame_index})
+        current_frame = frames[frame_index-1]
       end
       result = current_frame.add_fall(pinfall)
       return false unless result # check invalid input
@@ -29,6 +30,8 @@ class Player
   end
 
   def generate_scores
-    @framws 
+    @frames.each_with_index do |frame, index|
+      frame.calculate_score(@frames[index+1], [index+2])
+    end
   end
 end

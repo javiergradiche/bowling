@@ -11,6 +11,22 @@ class Frame
     @score = 0
   end
 
+  def calculate_score(first_next_frame, second_next_frame)
+    if @position == 10
+      @score = calculate_score_frame_10
+    else
+      @score = calculate_score_frame_1_to_9(first_next_frame, second_next_frame)
+    end
+  end
+
+  def calculate_score_frame_1_to_9(first_next_frame, second_next_frame)
+    0
+  end
+
+  def calculate_score_frame_10
+    0
+  end
+
   def add_fall(falls)
     return false if finished?
 
@@ -21,6 +37,10 @@ class Frame
     else
       @third_bowl = falls
     end
+  end
+
+  def curated_falls(falls)
+    (falls == 'F')? 0 : falls.to_i
   end
 
   def add_score(score)
