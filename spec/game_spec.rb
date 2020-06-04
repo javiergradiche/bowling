@@ -8,7 +8,7 @@ RSpec.describe Game do
     expect(game.class).to be Game
   end
 
-  xit 'generate all sum 9 game' do
+  it 'generate all sum 9 game' do
     path = 'spec/fixtures/test.1player-all-open.txt'
     game = Game.new(path)
     player = game.players['Javi']
