@@ -12,7 +12,7 @@ class Game
     File.open(@file_path).each do |line|
       player_name, falls = line.strip.split(' ')
       @players[player_name] = @players[player_name] || Player.new(player_name) 
-      @players[player_name].add_attemp(falls.to_i)
+      @players[player_name].add_fall(falls.to_i)
     end
   end
 end

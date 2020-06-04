@@ -8,7 +8,7 @@ class Player
     @name = name
   end
   
-  def add_attemp(falls)
+  def add_fall(falls)
     @pinfalls << falls
   end
 end
