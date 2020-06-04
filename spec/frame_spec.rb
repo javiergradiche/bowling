@@ -63,5 +63,53 @@ RSpec.describe Frame do
     expect(frame.open?).to be true
   end
 
+  it 'Finished for frame < 10' do
+    frame = Frame.new({
+      position: 1,
+      first_bowl: 2,
+      second_bowl: 3
+    })
+    expect(frame.finished?).to be true
+  end
+
+  it 'Finished for frame == 10 with strike' do
+    frame = Frame.new({
+      position: 10,
+      first_bowl: 10,
+      second_bowl: 3
+    })
+    expect(frame.strike?).to be true
+    expect(frame.finished?).to be false
+
+    frame = Frame.new({
+      position: 10,
+      first_bowl: 10,
+      second_bowl: 3,
+      third_bowl: 5,
+    })
+    expect(frame.strike?).to be true
+    expect(frame.finished?).to be true
+  end
+
+  it 'Finished for frame == 10 with spare' do
+    frame = Frame.new({
+      position: 10,
+      first_bowl: 2,
+      second_bowl: 8
+    })
+    expect(frame.spare?).to be true
+    expect(frame.finished?).to be true
+  end
+
+  it 'Finished for frame == 10 with open' do
+    frame = Frame.new({
+      position: 10,
+      first_bowl: 2,
+      second_bowl: 3
+    })
+    expect(frame.open?).to be true
+    expect(frame.finished?).to be true
+  end
+
 
 end
