@@ -8,7 +8,7 @@ RSpec.describe Game do
     expect(game.class).to be Game
   end
 
-  it 'generate all sum 9 game' do
+  xit 'generate all sum 9 game' do
     path = 'spec/fixtures/test.1player-all-open.txt'
     game = Game.new(path)
     player = game.players['Javi']
@@ -21,7 +21,7 @@ RSpec.describe Game do
     expect(frames[9].score).to be 90
   end
 
-  it 'generate all 0 game' do
+  xit 'generate all 0 game' do
     path = 'spec/fixtures/test.1player-all-0.txt'
     game = Game.new(path)
     player = game.players['Javi']
@@ -34,7 +34,7 @@ RSpec.describe Game do
     expect(frames[9].score).to be 0
   end
 
-  it 'generate Steve video game' do
+  xit 'generate Steve video game' do
     path = 'spec/fixtures/test.1player-all-0.txt'
     game = Game.new(path)
     player = game.players['Javi']

@@ -172,7 +172,7 @@ RSpec.describe Frame do
     end
   end
 
-  context 'Calculate score frames 1..9' do
+  context 'Calculate score frames 1..8' do
     before(:each) do
       @frame1 = Frame.new({position: 1})
       @frame2 = Frame.new({position: 2})
@@ -195,36 +195,99 @@ RSpec.describe Frame do
       expect(@frame1.score).to be 19
     end
 
-    it "Strike first & second frame, spare third"
-    it "Strike first & second frame, open third"
-    it "Strike first, second & third frame"
-    it "Spare first frame, strike second"
-    it "Spare first frame, spare second"
-    it "Spare first frame, open second"
+    it "Strike first & second frame, spare third" do
+      @frame1.first_bowl = 10
+      @frame2.first_bowl = 10
+      @frame3.first_bowl = 5
+      @frame3.second_bowl = 5
+      @frame1.calculate_score(0, @frame2, @frame3)
+      expect(@frame1.score).to be 25
+    end
+
+    it "Strike first & second frame, open third" do
+      @frame1.first_bowl = 10
+      @frame2.first_bowl = 10
+      @frame3.first_bowl = 5
+      @frame3.second_bowl = 0
+      @frame1.calculate_score(0, @frame2, @frame3)
+      expect(@frame1.score).to be 25
+    end
+
+    it "Strike first, second & third frame" do
+      @frame1.first_bowl = 10
+      @frame2.first_bowl = 10
+      @frame3.first_bowl = 10
+      @frame1.calculate_score(0, @frame2, @frame3)
+      expect(@frame1.score).to be 30
+    end
+
+    it "Spare first frame, strike second" do
+      @frame1.first_bowl = 5
+      @frame1.second_bowl = 5
+      @frame2.first_bowl = 10
+      @frame3.first_bowl = 5
+      @frame1.calculate_score(0, @frame2, @frame3)
+      expect(@frame1.score).to be 20
+    end
+
+    it "Spare first frame, spare second" do
+      @frame1.first_bowl = 5
+      @frame1.second_bowl = 5
+      @frame2.first_bowl = 5
+      @frame2.second_bowl = 5
+      @frame3.first_bowl = 10
+      @frame1.calculate_score(0, @frame2, @frame3)
+      expect(@frame1.score).to be 15
+    end
+
+    it "Spare first frame, open second" do
+      @frame1.first_bowl = 5
+      @frame1.second_bowl = 5
+      @frame2.first_bowl = 5
+      @frame2.second_bowl = 2
+      @frame3.first_bowl = 5
+      @frame1.calculate_score(0, @frame2, @frame3)
+      expect(@frame1.score).to be 15
+    end
   end
 
-  context 'Calculate score frame 10' do
+  context 'Calculate score frames 9..10' do
     before(:each) do
-      @frame = Frame.new({position: 10})
+      @frame9 = Frame.new({position: 9})
+      @frame10 = Frame.new({position: 10})
     end
 
-    it 'Add 3 falls if strike at first' do
-      @frame.add_fall(10)
-      @frame.add_fall(1)
-      expect(@frame.finished?).to be false
-      @frame.add_fall(1)
-      expect(@frame.finished?).to be true
+    it "Strike frame 9, Strike,Strike,Stike frame 10 " do
+      @frame9.first_bowl = 10
+      @frame10.first_bowl = 10
+      @frame10.second_bowl = 10
+      @frame10.third_bowl = 10
+      @frame9.calculate_score(0, @frame10, nil)
+      expect(@frame9.score).to be 30
+      @frame10.calculate_score(30, nil, nil)
+      expect(@frame10.score).to be 60
     end
 
-    it 'Only 2 falls if not strike at first' do
-      @frame = Frame.new({position: 10})
-      @frame.add_fall(9)
-      @frame.add_fall(1)
-      expect(@frame.finished?).to be true
-      expect(@frame.add_fall(3)).to be false
-      expect(@frame.third_bowl).to be nil
+    it "Strike frame 9, Strike,5,Spare frame 10 " do
+      @frame9.first_bowl = 10
+      @frame10.first_bowl = 10
+      @frame10.second_bowl = 5
+      @frame10.third_bowl = 5
+      @frame9.calculate_score(0, @frame10, nil)
+      expect(@frame9.score).to be 25
+      @frame10.calculate_score(25, nil, nil)
+      expect(@frame10.score).to be 45
+    end
+
+    it "Strike frame 9, Strike,5,3 frame 10 " do
+      @frame9.first_bowl = 10
+      @frame10.first_bowl = 10
+      @frame10.second_bowl = 5
+      @frame10.third_bowl = 3
+      @frame9.calculate_score(0, @frame10, nil)
+      expect(@frame9.score).to be 25
+      @frame10.calculate_score(25, nil, nil)
+      expect(@frame10.score).to be 43
     end
   end
-
-
 end

@@ -11,28 +11,27 @@ class Frame
     @score = 0
   end
 
-  def calculate_score(acum_score, first_next_frame, second_next_frame)
-    if @position == 10
-      @score = acum_score + calculate_score_frame_10
-    else
-      @score = acum_score + calculate_score_frame_1_to_9(first_next_frame, second_next_frame)
+  def calculate_score(acum_score, first_next_frame = nil, second_next_frame = nil)
+    @score = acum_score + bowls_score
+    unless last?
+      @score += calculate_score_first_next(first_next_frame)
+      @score += calculate_score_second_next(first_next_frame, second_next_frame) 
     end
+    @score
   end
 
-  def calculate_score_frame_1_to_9(first_next_frame, second_next_frame)
-    first_next_score = 0
+  def calculate_score_first_next(first_next_frame)
+    first_next_frame.first_bowl
+  end
+
+  def calculate_score_second_next(first_next_frame, second_next_frame)
     second_next_score = 0
-    if strike?
-      first_next_score = first_next_frame.bowls_score
-      second_next_score = (first_next_frame.strike?)? second_next_frame.first_bowl : 0
-    elsif spare?
-      first_next_score = first_next_frame.first_bowl
+    if self.strike? && first_next_frame.strike?
+      second_next_score = (first_next_frame.last?)? first_next_frame.second_bowl : second_next_frame.first_bowl
+    elsif self.strike? && !first_next_frame.strike?
+      second_next_score = first_next_frame.second_bowl
     end
-    bowls_score + first_next_score + second_next_score
-  end
-
-  def calculate_score_frame_10
-    0
+    second_next_score
   end
 
   def bowls_score
@@ -83,6 +82,10 @@ class Frame
 
   def valid?
     !@position.nil? && @position > 0 && position < 11
+  end
+
+  def last?
+    (@position == 10)
   end
 
 end
