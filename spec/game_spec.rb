@@ -34,6 +34,26 @@ RSpec.describe Game do
     expect(frames[9].score).to be 0
   end
 
+  it 'generate Steve video game' do
+    path = 'spec/fixtures/test.1player-all-0.txt'
+    game = Game.new(path)
+    player = game.players['Javi']
+    player.generate_frames
+    player.generate_scores
+    frames = player.frames
+    expect(player.frames.size).to be 10
+    expect(frames[0].score).to be 17
+    expect(frames[1].score).to be 30
+    expect(frames[2].score).to be 37
+    expect(frames[3].score).to be 57
+    expect(frames[4].score).to be 77
+    expect(frames[5].score).to be 105
+    expect(frames[6].score).to be 123
+    expect(frames[7].score).to be 131
+    expect(frames[8].score).to be 151
+    expect(frames[9].score).to be 170
+  end
+
   xit 'generate all F game'
   xit 'generate all 10 game'
 end
