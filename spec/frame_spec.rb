@@ -2,114 +2,154 @@ require 'spec_helper'
 require_relative "../lib/frame"
 
 RSpec.describe Frame do
-  it 'Mandatory position option' do
-    frame = Frame.new
-    expect(frame.valid?).to be false
+  context 'Validation' do
+    it 'Mandatory position option' do
+      frame = Frame.new
+      expect(frame.valid?).to be false
+    end
+  
+    it 'Position option between 1..10' do
+      frame = Frame.new({position: 0})
+      expect(frame.valid?).to be false
+      frame2 = Frame.new({position: 1})
+      expect(frame2.valid?).to be true
+      frame3 = Frame.new({position: 10})
+      expect(frame3.valid?).to be true
+      frame4 = Frame.new({position: 11})
+      expect(frame4.valid?).to be false
+    end
   end
 
-  it 'Position option between 1..10' do
-    frame = Frame.new({position: 0})
-    expect(frame.valid?).to be false
-    frame2 = Frame.new({position: 1})
-    expect(frame2.valid?).to be true
-    frame3 = Frame.new({position: 10})
-    expect(frame3.valid?).to be true
-    frame4 = Frame.new({position: 11})
-    expect(frame4.valid?).to be false
+  context 'States' do
+    it 'Strike if first bowl fall 10' do
+      frame = Frame.new({
+        position: 1,
+        first_bowl: 10
+      })
+      expect(frame.strike?).to be true
+    end
+
+    it 'Spare if first 1 + second 9 = total fall 10' do
+      frame = Frame.new({
+        position: 1,
+        first_bowl: 1,
+        second_bowl: 9
+      })
+      expect(frame.spare?).to be true
+    end
+
+    it 'Spare if first 9 + second 1 = total fall 10' do
+      frame = Frame.new({
+        position: 1,
+        first_bowl: 1,
+        second_bowl: 9
+      })
+      expect(frame.spare?).to be true
+    end
+
+    it 'Spare if first 0 + second 10 = total fall 10' do
+      frame = Frame.new({
+        position: 1,
+        first_bowl: 0,
+        second_bowl: 10
+      })
+      expect(frame.spare?).to be true
+    end
+
+    it 'Open when first + seconds < 10' do
+      frame = Frame.new({
+        position: 1,
+        first_bowl: 2,
+        second_bowl: 3
+      })
+      expect(frame.spare?).to be false
+      expect(frame.open?).to be true
+    end
+
+    it 'Finished for frame < 10' do
+      frame = Frame.new({
+        position: 1,
+        first_bowl: 2,
+        second_bowl: 3
+      })
+      expect(frame.finished?).to be true
+    end
+
+    it 'Finished for frame == 10 with strike' do
+      frame = Frame.new({
+        position: 10,
+        first_bowl: 10,
+        second_bowl: 3
+      })
+      expect(frame.strike?).to be true
+      expect(frame.finished?).to be false
+
+      frame = Frame.new({
+        position: 10,
+        first_bowl: 10,
+        second_bowl: 3,
+        third_bowl: 5,
+      })
+      expect(frame.strike?).to be true
+      expect(frame.finished?).to be true
+    end
+
+    it 'Finished for frame == 10 with spare' do
+      frame = Frame.new({
+        position: 10,
+        first_bowl: 2,
+        second_bowl: 8
+      })
+      expect(frame.spare?).to be true
+      expect(frame.finished?).to be true
+    end
+
+    it 'Finished for frame == 10 with open' do
+      frame = Frame.new({
+        position: 10,
+        first_bowl: 2,
+        second_bowl: 3
+      })
+      expect(frame.open?).to be true
+      expect(frame.finished?).to be true
+    end
   end
 
-  it 'Strike if first bowl fall 10' do
-    frame = Frame.new({
-      position: 1,
-      first_bowl: 10
-    })
-    expect(frame.strike?).to be true
+  context 'Popuplate framwes 1..9' do
+    before(:each) do
+      @frame = Frame.new({position: 1})
+    end
+
+    it 'Add falls' do
+      @frame.add_fall(1)
+      expect(@frame.finished?).to be false
+      @frame.add_fall(1)
+      expect(@frame.finished?).to be true
+    end
+
+    it 'Return false if you want to add more than 2 falls' do
+      frame = Frame.new({position: 1}
+      frame.add_fall(1)
+      frame.add_fall(2)
+      expect(frame.valid?).to be true
+      frame.add_fall(3)
+      expect(frame.valid?).to be false
+      expect(frame.third_bowl).to be nil
+    end
+
+    # it 'Only 1 falls if first is strike' do
+    #   frame = Frame.new({position: 1}
+    #   frame.add_fall(10)
+    #   frame.add_fall(2)
+    #   expect(frame.valid?).to be false
+    # end
   end
 
-  it 'Spare if first 1 + second 9 = total fall 10' do
-    frame = Frame.new({
-      position: 1,
-      first_bowl: 1,
-      second_bowl: 9
-    })
-    expect(frame.spare?).to be true
-  end
-
-  it 'Spare if first 9 + second 1 = total fall 10' do
-    frame = Frame.new({
-      position: 1,
-      first_bowl: 1,
-      second_bowl: 9
-    })
-    expect(frame.spare?).to be true
-  end
-
-  it 'Spare if first 0 + second 10 = total fall 10' do
-    frame = Frame.new({
-      position: 1,
-      first_bowl: 0,
-      second_bowl: 10
-    })
-    expect(frame.spare?).to be true
-  end
-
-  it 'Open when first + seconds < 10' do
-    frame = Frame.new({
-      position: 1,
-      first_bowl: 2,
-      second_bowl: 3
-    })
-    expect(frame.spare?).to be false
-    expect(frame.open?).to be true
-  end
-
-  it 'Finished for frame < 10' do
-    frame = Frame.new({
-      position: 1,
-      first_bowl: 2,
-      second_bowl: 3
-    })
-    expect(frame.finished?).to be true
-  end
-
-  it 'Finished for frame == 10 with strike' do
-    frame = Frame.new({
-      position: 10,
-      first_bowl: 10,
-      second_bowl: 3
-    })
-    expect(frame.strike?).to be true
-    expect(frame.finished?).to be false
-
-    frame = Frame.new({
-      position: 10,
-      first_bowl: 10,
-      second_bowl: 3,
-      third_bowl: 5,
-    })
-    expect(frame.strike?).to be true
-    expect(frame.finished?).to be true
-  end
-
-  it 'Finished for frame == 10 with spare' do
-    frame = Frame.new({
-      position: 10,
-      first_bowl: 2,
-      second_bowl: 8
-    })
-    expect(frame.spare?).to be true
-    expect(frame.finished?).to be true
-  end
-
-  it 'Finished for frame == 10 with open' do
-    frame = Frame.new({
-      position: 10,
-      first_bowl: 2,
-      second_bowl: 3
-    })
-    expect(frame.open?).to be true
-    expect(frame.finished?).to be true
-  end
-
-
+  # context 'Popuplate framwes 10' do
+  #   it 'Add falls' do
+  #     frame = Frame.new({position: 10}
+  #     frame.add_fall(1)
+  #     frame.add_fall(1)
+  #   end
+  # end
 end

@@ -10,16 +10,32 @@ class Frame
     @third_bowl = options[:third_bowl]
   end
 
+  def add_fall(falls)
+    return false if completed?
+
+    if @first_bowl.nil?
+      @first_bowl = falls
+    elsif @second_bowl.nil?
+      @second_bowl = falls
+    else
+      @third_bowl = falls
+    end
+  end
+
+  def next_fall
+    @first_bowl || @second_bowl || @third_bowl
+  end
+
   def strike?
     @first_bowl == 10
   end
 
   def spare?
-    (@first_bowl + @second_bowl) == 10
+    ((@first_bowl||0) + (@second_bowl||0)) == 10
   end
 
   def open?
-    (@first_bowl + @second_bowl) < 10
+    ((@first_bowl||0) + (@second_bowl||0)) < 10
   end
 
   def finished?
