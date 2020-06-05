@@ -21,7 +21,11 @@ class Frame
   end
 
   def calculate_score_first_next(first_next_frame)
-    first_next_frame.first_bowl
+    first_next_score = 0
+    if self.strike? || self.spare?
+      first_next_score = first_next_frame.first_bowl
+    end
+    first_next_score
   end
 
   def calculate_score_second_next(first_next_frame, second_next_frame)
@@ -76,7 +80,7 @@ class Frame
 
   def finished?
     return (strike?||spare?||(@second_bowl.is_a?(Integer))) if @position < 10
-    return ((strike?&&@third_bowl.is_a?(Integer))||(!strike?&&@second_bowl.is_a?(Integer))) if @position == 10
+    return (((strike?||spare?)&&@third_bowl.is_a?(Integer))||((!strike?&&!spare?)&&@second_bowl.is_a?(Integer))) if @position == 10
     return false
   end
 
@@ -87,5 +91,6 @@ class Frame
   def last?
     (@position == 10)
   end
+
 
 end

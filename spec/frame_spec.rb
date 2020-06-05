@@ -94,14 +94,14 @@ RSpec.describe Frame do
       expect(frame.finished?).to be true
     end
 
-    it 'Finished for frame == 10 with spare' do
+    it 'Not finished for frame == 10 with spare' do
       frame = Frame.new({
         position: 10,
         first_bowl: 2,
         second_bowl: 8
       })
       expect(frame.spare?).to be true
-      expect(frame.finished?).to be true
+      expect(frame.finished?).to be false
     end
 
     it 'Finished for frame == 10 with open' do
@@ -113,6 +113,15 @@ RSpec.describe Frame do
       expect(frame.open?).to be true
       expect(frame.finished?).to be true
     end
+
+    it 'Not finished for frame == 10 with strike, but not third' do
+      frame = Frame.new({
+        position: 10,
+        first_bowl: 10,
+        second_bowl: 3
+      })
+      expect(frame.finished?).to be false
+    end    
   end
 
   context 'Popuplate frames 1..9' do
@@ -162,13 +171,13 @@ RSpec.describe Frame do
       expect(@frame.finished?).to be true
     end
 
-    it 'Only 2 falls if not strike at first' do
+    it 'Add 3 falls if not strike at first' do
       @frame = Frame.new({position: 10})
       @frame.add_fall(9)
       @frame.add_fall(1)
+      expect(@frame.finished?).to be false
+      @frame.add_fall(3)
       expect(@frame.finished?).to be true
-      expect(@frame.add_fall(3)).to be false
-      expect(@frame.third_bowl).to be nil
     end
   end
 
@@ -219,6 +228,26 @@ RSpec.describe Frame do
       @frame3.first_bowl = 10
       @frame1.calculate_score(0, @frame2, @frame3)
       expect(@frame1.score).to be 30
+    end
+
+    it "Strike first, second, third and fourth frame" do
+      @frame1.first_bowl = 10
+      @frame2.first_bowl = 10
+      @frame3.first_bowl = 10
+      @frame4 = Frame.new({position: 4})
+      @frame5 = Frame.new({position: 5})
+      @frame6 = Frame.new({position: 6})
+      @frame4.first_bowl = 10
+      @frame5.first_bowl = 10
+      @frame6.first_bowl = 10
+      @frame1.calculate_score(0, @frame2, @frame3)
+      @frame2.calculate_score(30, @frame3, @frame4)
+      @frame3.calculate_score(60, @frame4, @frame5)
+      @frame4.calculate_score(90, @frame5, @frame6)
+      expect(@frame1.score).to be 30
+      expect(@frame2.score).to be 60
+      expect(@frame3.score).to be 90
+      expect(@frame4.score).to be 120
     end
 
     it "Spare first frame, strike second" do

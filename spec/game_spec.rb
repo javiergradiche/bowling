@@ -17,11 +17,11 @@ RSpec.describe Game do
     frames = player.frames
     expect(player.frames.size).to be 10
     expect(frames[0].score).to be 9
-    expect(frames[5].score).to be 45
+    expect(frames[5].score).to be 54
     expect(frames[9].score).to be 90
   end
 
-  xit 'generate all 0 game' do
+  it 'generate all 0 game' do
     path = 'spec/fixtures/test.1player-all-0.txt'
     game = Game.new(path)
     player = game.players['Javi']
@@ -34,10 +34,10 @@ RSpec.describe Game do
     expect(frames[9].score).to be 0
   end
 
-  xit 'generate Steve video game' do
-    path = 'spec/fixtures/test.1player-all-0.txt'
+  it 'generate Steve video game' do
+    path = 'spec/fixtures/test.1player-video.txt'
     game = Game.new(path)
-    player = game.players['Javi']
+    player = game.players['Steve']
     player.generate_frames
     player.generate_scores
     frames = player.frames
@@ -54,6 +54,29 @@ RSpec.describe Game do
     expect(frames[9].score).to be 170
   end
 
-  xit 'generate all F game'
-  xit 'generate all 10 game'
+  it 'generate all F game' do
+    path = 'spec/fixtures/test.1player-all-F.txt'
+    game = Game.new(path)
+    player = game.players['Javi']
+    player.generate_frames
+    player.generate_scores
+    frames = player.frames
+    expect(player.frames.size).to be 10
+    expect(frames[0].score).to be 0
+    expect(frames[5].score).to be 0
+    expect(frames[9].score).to be 0
+  end
+
+  it 'generate all 10 game' do
+    path = 'spec/fixtures/test.1player-all-10.txt'
+    game = Game.new(path)
+    player = game.players['Javi']
+    player.generate_frames
+    player.generate_scores
+    frames = player.frames
+    expect(player.frames.size).to be 10
+    expect(frames[0].score).to be 30
+    expect(frames[5].score).to be 180
+    expect(frames[9].score).to be 300
+  end
 end

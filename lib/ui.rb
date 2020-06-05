@@ -19,8 +19,8 @@ class UI
     output = ''
     @game.players.each do |player_name, player|
       output += "#{player.name}\n"
-      output += draw_pinfalls(player.pinfalls)
-      # output += draw_score(player.scores)
+      output += draw_pinfalls(player.frames.map {|f| format_falls(f)})
+      output += draw_score(player.frames.map {|f| format_score(f)})
     end
     output
   end
@@ -35,5 +35,20 @@ class UI
     o_score = "Score\t\t"
     o_score += scores.join("\t\t")
     o_score += "\n"
+  end
+
+  def format_falls(frame)
+    first_char = (frame.first_bowl == 10)? "X": frame.first_bowl
+    second_char = (frame.second_bowl == 10)? "X": (frame.second_bowl||'\t')
+    third_char = (framw.third_bowl == 10)? "X": (frame.third_bowl||'\t')
+    # if spare?
+    #   first_char = "X"
+    # elsif 
+    # end
+    "\t#{first_char}\t#{second_char}\t#{third_char}"
+  end
+
+  def format_scores(frame)
+    "\t\t#{@score}"
   end
 end

@@ -32,8 +32,14 @@ class Player
   def generate_scores
     acum_score = 0
     @frames.each_with_index do |frame, index|
-      frame.calculate_score(acum_score, @frames[index+1], [index+2])
-      acum_score += frame.score
+      if frame.last?
+        frame.calculate_score(acum_score, nil, nil)
+      elsif frame.position == 9
+        frame.calculate_score(acum_score, @frames[index+1], nil)
+      else
+        frame.calculate_score(acum_score, @frames[index+1], @frames[index+2])
+      end
+      acum_score = frame.score
     end
   end
 end
