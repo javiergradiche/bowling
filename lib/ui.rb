@@ -59,7 +59,7 @@ class UI
   def format_second(frame)
     if frame.strike?
       if frame.last?
-        (frame.second_bowl == 10)? "X" : "#{frame.second_bowl.to_s}\t"
+        (frame.second_bowl == 10)? "X\t" : "#{frame.second_bowl.to_s}\t"
       else
         "X"
       end
