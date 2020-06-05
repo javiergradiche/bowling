@@ -4,8 +4,16 @@ require_relative "../lib/player"
 RSpec.describe Player do
   before(:each) do
     @player = Player.new('Javier')
-    @player.add_fall(1)
-    @player.add_fall(2)
+    @player.add_fall(10)
+    @player.add_fall(10)
+    @player.add_fall(10)
+    @player.add_fall(10)
+    @player.add_fall(10)
+    @player.add_fall(10)
+    @player.add_fall(10)
+    @player.add_fall(10)
+    @player.add_fall(10)
+    @player.add_fall(10)
   end
 
   it 'Has a valid factory' do
@@ -17,11 +25,9 @@ RSpec.describe Player do
       @player.generate_frames
       frame = @player.frames.first
       expect(frame.class).to be Frame
-      expect(frame.first_bowl).to eq 1
-      expect(frame.second_bowl).to eq 2
-      expect(frame.third_bowl).to eq nil
+      expect(frame.first_bowl).to eq 10
+      expect(@player.frames.size).to eq 10
     end
   end
-
 
 end

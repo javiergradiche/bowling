@@ -2,6 +2,10 @@ require 'spec_helper'
 require_relative "../lib/game"
 
 RSpec.describe Game do
+  before(:all) do
+    game = nil
+  end
+
   it 'Has a valid factory' do
     path = 'spec/fixtures/test.game-example.txt'
     game = Game.new(path)
@@ -78,5 +82,32 @@ RSpec.describe Game do
     expect(frames[0].score).to be 30
     expect(frames[5].score).to be 180
     expect(frames[9].score).to be 300
+  end
+
+  it 'fail generate bad input' do
+    path = 'spec/fixtures/test.fail-bad-input.txt'
+    expect{ 
+      game = Game.new(path)
+      player = game.players['Javi']
+      player.generate_frames
+    }.to raise_exception Exception
+  end
+
+  it 'fail generate incomplete game' do
+    path = 'spec/fixtures/test.fail-game-incomplete.txt'
+    expect{ 
+      game = Game.new(path)
+      player = game.players['Javi']
+      player.generate_frames
+    }.to raise_exception Exception
+  end
+
+  it 'fail generate bad input' do
+    path = 'spec/fixtures/test.fail-game-exceed.txt'
+    expect{ 
+      game = Game.new(path)
+      player = game.players['Javi']
+      player.generate_frames
+    }.to raise_exception Exception
   end
 end

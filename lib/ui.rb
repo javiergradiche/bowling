@@ -1,4 +1,3 @@
-require 'byebug'
 class UI
   def initialize(game)
     @game = game

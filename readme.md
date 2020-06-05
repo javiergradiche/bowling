@@ -31,6 +31,9 @@ Integration tests added within the fixtures at
 * spec/fixtures/test.1player-video.txt
 * spec/fixtures/test.game-example.txt
 * spec/fixtures/test.jeff-game-example.txt
+* spec/fixtures/test.fail-bad-input.txt
+* spec/fixtures/test.fail-game-incomplete.txt
+* spec/fixtures/test.fail-game-exceed.txt
 
 ## Run test:
 ```bash

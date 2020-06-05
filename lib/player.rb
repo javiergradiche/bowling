@@ -15,6 +15,7 @@ class Player
 
   def generate_frames
     frame_index = 1
+    @frames = []
     @frames << Frame.new({position: frame_index})
     @pinfalls.each do |pinfall|
       current_frame = frames[frame_index-1]
@@ -23,10 +24,10 @@ class Player
         @frames << Frame.new({position: frame_index})
         current_frame = frames[frame_index-1]
       end
-      result = current_frame.add_fall(pinfall)
-      return false unless result # check invalid input
+      current_frame.add_fall(pinfall)
     end
-    return false if frame_index != 10 # check invalid input
+
+    raise Exception, "Invalid frames size => #{@frames.size}" if @frames.size != 10
   end
 
   def generate_scores

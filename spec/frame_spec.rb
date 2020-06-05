@@ -18,6 +18,13 @@ RSpec.describe Frame do
       frame4 = Frame.new({position: 11})
       expect(frame4.valid?).to be false
     end
+
+    it 'Raise FrameExpection if bad fall input' do
+      frame = Frame.new({position: 1})
+      expect{ 
+        frame.add_fall('B')
+      }.to raise_exception Exception
+    end
   end
 
   context 'States' do

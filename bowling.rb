@@ -9,9 +9,14 @@ class Bowling < Thor
 
   desc "game GAME.txt", "game bowling game with GAME.txt"
   def game(file_name)
-    game = Game.new(file_name)
-    ui = UI.new(game)
-    puts ui.to_s
+    begin
+      game = Game.new(file_name)
+      ui = UI.new(game)
+      puts ui.to_s
+    rescue Exception => e
+      puts "Invalid input file"
+      puts e
+    end
   end
 end
 

@@ -1,7 +1,7 @@
-class FrameException < Exception; end;
-
 class Frame
   attr_accessor :first_bowl, :second_bowl, :third_bowl, :position, :score
+
+  VALID_INPUT = [(0..10).to_a,('0'..'10').to_a,'F','X'].flatten
 
   def initialize(options = {})
     @position = options[:position]
@@ -46,15 +46,18 @@ class Frame
     return false if finished?
 
     if @first_bowl.nil?
-      @first_bowl = falls
+      @first_bowl = curated_falls(falls)
     elsif @second_bowl.nil?
-      @second_bowl = falls
+      @second_bowl = curated_falls(falls)
     else
-      @third_bowl = falls
+      @third_bowl = curated_falls(falls)
     end
   end
 
   def curated_falls(falls)
+    unless VALID_INPUT.include?(falls)
+      raise Exception, "Invalid fall => #{falls}" 
+    end
     (falls == 'F')? 0 : falls.to_i
   end
 
