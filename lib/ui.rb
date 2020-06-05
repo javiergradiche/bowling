@@ -1,3 +1,4 @@
+require 'byebug'
 class UI
   def initialize(game)
     @game = game
@@ -12,7 +13,7 @@ class UI
   end
 
   def draw_header
-    "Frame\t\t1\t\t2\t\t3\t\t4\t\t5\t\t6\t7\t\t8\t\t9\t\t10\n"
+    "Frame\t\t1\t\t2\t\t3\t\t4\t\t5\t\t6\t\t7\t\t8\t\t9\t\t10\n"
   end
 
   def draw_players
@@ -20,14 +21,14 @@ class UI
     @game.players.each do |player_name, player|
       output += "#{player.name}\n"
       output += draw_pinfalls(player.frames.map {|f| format_falls(f)})
-      output += draw_score(player.frames.map {|f| format_score(f)})
+      output += draw_score(player.frames.map {|f| format_scores(f.score)})
     end
     output
   end
 
   def draw_pinfalls(pinfalls)
-    o_pinfalls = "Pinfalls\t\t"
-    o_pinfalls += pinfalls.join("\t\t")
+    o_pinfalls = "Pinfalls\t"
+    o_pinfalls += pinfalls.join("\t")
     o_pinfalls += "\n"
   end
   
@@ -38,17 +39,46 @@ class UI
   end
 
   def format_falls(frame)
-    first_char = (frame.first_bowl == 10)? "X": frame.first_bowl
-    second_char = (frame.second_bowl == 10)? "X": (frame.second_bowl||'\t')
-    third_char = (framw.third_bowl == 10)? "X": (frame.third_bowl||'\t')
-    # if spare?
-    #   first_char = "X"
-    # elsif 
-    # end
-    "\t#{first_char}\t#{second_char}\t#{third_char}"
+    out = "#{format_first(frame)}#{format_second(frame)}"
+    out += "#{format_third(frame)}" if frame.last?
+    out
   end
 
-  def format_scores(frame)
-    "\t\t#{@score}"
+  def format_first(frame)
+    if frame.strike?
+      if frame.last?
+        "X\t"
+      else
+        "\t"
+      end
+    else
+      "#{frame.first_bowl.to_s}\t"
+    end
+  end
+
+  def format_second(frame)
+    if frame.strike?
+      if frame.last?
+        (frame.second_bowl == 10)? "X" : "#{frame.second_bowl.to_s}\t"
+      else
+        "X"
+      end
+    elsif frame.spare?
+      '/'
+    else
+      "#{frame.second_bowl.to_s}"
+    end
+  end
+
+  def format_third(frame)
+    if frame.last?
+      (frame.third_bowl == 10)? "X" : "#{frame.third_bowl.to_s}\t"
+    else
+      "#{frame.third_bowl.to_s}"
+    end
+  end
+
+  def format_scores(score)
+    "#{score}"
   end
 end
